@@ -1,6 +1,8 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import GithubProvider from "next-auth/providers/github";
+import { MongoDBAdapter } from "@auth/mongodb-adapter" 
+import mongoClientPromise from "@/lib/mongoClientPromise";
 
 export const {
     handlers: { GET, POST },
@@ -18,5 +20,6 @@ export const {
       clientId: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET
     }),
-  ]
+  ],
+  adapter: MongoDBAdapter(mongoClientPromise),
 });
