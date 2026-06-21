@@ -11,4 +11,9 @@ async function doSignInWithGithub() {
         await signIn('github',{ callbackUrl: '/' });
 }
 
-export { doSignOut, doSignInWithGoogle, doSignInWithGithub };
+async function credentialSignIn(email, password) { 
+        const response =await signIn('credentials', { email, password, callbackUrl: '/' });
+        return response;
+}
+
+export { doSignOut, doSignInWithGoogle, doSignInWithGithub, credentialSignIn };

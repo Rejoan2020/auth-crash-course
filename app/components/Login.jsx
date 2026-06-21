@@ -1,14 +1,25 @@
 'use client';
-import { useState } from "react";
-import Link from "next/link";
-import { doSignInWithGithub, doSignInWithGoogle } from "@/app/actions";
+import { useState } from "react"; 
+import { doSignInWithGithub, doSignInWithGoogle, credentialSignIn } from "@/app/actions";
+import { useRouter } from "next/navigation";
+
 export default function Home() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const handleSubmit = (e) => {
+  const router = useRouter();
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Username:", username);
-    console.log("Password:", password);
+    try {
+      const response = await credentialSignIn(email, password);
+      if(response?.error) {
+        console.error("Error signing in with credentials:", response.error);
+      }
+      else{
+        router.push('/'); // Redirect to home page on successful login
+      }
+    } catch (error) {
+      console.error("Error signing in:", error);
+    }
   }
 
   return (
@@ -19,11 +30,11 @@ export default function Home() {
           onSubmit={handleSubmit}
         >
           <input
-            type="text"
-            placeholder="Username"
+            type="email"
+            placeholder="email"
             className="mb-4 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
 
           <input
